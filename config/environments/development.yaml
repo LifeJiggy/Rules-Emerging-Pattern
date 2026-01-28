@@ -1,0 +1,248 @@
+# Development Environment Configuration
+# Settings for development and testing environments
+
+environment:
+  name: "development"
+  debug: true
+  log_level: "DEBUG"
+  
+# Database Configuration
+database:
+  url: "sqlite:///./dev_rules.db"
+  echo: true
+  pool_size: 5
+  max_overflow: 10
+  pool_timeout: 30
+
+# Redis Configuration  
+redis:
+  url: "redis://localhost:6379/1"
+  decode_responses: true
+  socket_timeout: 5
+  connection_pool_kwargs:
+    max_connections: 20
+
+# API Configuration
+api:
+  host: "127.0.0.1"
+  port: 8000
+  reload: true
+  workers: 1
+  access_log: true
+  
+  cors:
+    allow_origins: ["http://localhost:3000", "http://localhost:8080"]
+    allow_credentials: true
+    allow_methods: ["*"]
+    allow_headers: ["*"]
+
+# Security Configuration
+security:
+  encryption_key: "dev_encryption_key_change_in_production"
+  jwt_secret: "dev_jwt_secret_change_in_production"
+  jwt_algorithm: "HS256"
+  jwt_expire_minutes: 1440  # 24 hours for development
+  
+  api_key: "dev_api_key_change_in_production"
+  ssl_required: false
+
+# Rule Engine Configuration
+rule_engine:
+  # Performance Settings
+  performance:
+    max_evaluation_time_ms: 1000  # Relaxed for development
+    max_concurrent_rules: 10
+    cache_size: 100
+    batch_size: 4
+    
+  # Learning Settings  
+  learning:
+    enabled: true
+    learning_rate: 0.01
+    adaptation_frequency: "daily"
+    feedback_collection: true
+    
+  # Testing Features
+  testing:
+    enable_test_endpoints: true
+    enable_rule_editor: true
+    enable_performance_profiler: true
+    mock_external_services: true
+
+# Validation Configuration
+validation:
+  input_validation:
+    max_content_size: 50000  # 50KB for development
+    allowed_formats: ["text", "markdown", "json", "yaml"]
+    strict_validation: false
+    
+  output_validation:
+    quality_threshold: 0.7  # Lowered for development
+    auto_correction: true
+    suggestion_enabled: true
+
+# Content Processing
+content_processing:
+  # Text Analysis
+  text_analysis:
+    sentiment_analysis: true
+    language_detection: true
+    keyword_extraction: true
+    entity_recognition: true
+    
+  # ML Models
+  models:
+    cache_models: true
+    model_cache_dir: "./models"
+    download_missing_models: true
+    use_gpu: false  # CPU only for development
+    
+  # Content Filtering
+  filtering:
+    strict_mode: false
+    profanity_filter: true
+    pii_detection: true
+    copyright_check: true
+
+# External Service Integration
+external_services:
+  # AI Services
+  ai_services:
+    openai:
+      enabled: false  # Disabled in development by default
+      api_key: "sk-dev-key"
+      model: "gpt-3.5-turbo"
+      
+    anthropic:
+      enabled: false
+      api_key: "dev-key"
+      model: "claude-instant-1"
+      
+  # Monitoring Services
+  monitoring:
+    sentry:
+      enabled: false
+      dsn: "https://dev-dsn"
+      
+    prometheus:
+      enabled: true
+      port: 9090
+      
+    grafana:
+      enabled: true
+      port: 3000
+
+# Development Tools
+development_tools:
+  # Debugging
+  debugging:
+    debugger_enabled: true
+    request_logging: true
+    response_logging: true
+    sql_logging: true
+    
+  # Testing
+  testing:
+    pytest_integration: true
+    coverage_enabled: true
+    performance_testing: true
+    load_testing: false
+    
+  # Code Quality
+  code_quality:
+    linting: true
+    formatting: true
+    type_checking: true
+    pre_commit_hooks: true
+
+# Logging Configuration
+logging:
+  version: 1
+  disable_existing_loggers: false
+  
+  formatters:
+    detailed:
+      format: "%(asctime)s - %(name)s - %(levelname)s - %(module)s - %(funcName)s - %(message)s"
+      
+    simple:
+      format: "%(levelname)s - %(message)s"
+      
+  handlers:
+    console:
+      class: "logging.StreamHandler"
+      level: "DEBUG"
+      formatter: "detailed"
+      stream: "ext://sys.stdout"
+      
+    file:
+      class: "logging.handlers.RotatingFileHandler"
+      level: "INFO"
+      formatter: "detailed"
+      filename: "./logs/development.log"
+      maxBytes: 10485760  # 10MB
+      backupCount: 5
+      
+  loggers:
+    rules_emerging_pattern:
+      level: "DEBUG"
+      handlers: ["console", "file"]
+      propagate: false
+      
+    uvicorn:
+      level: "INFO"
+      handlers: ["console"]
+      propagate: false
+      
+  root:
+    level: "INFO"
+    handlers: ["console", "file"]
+
+# Feature Flags
+feature_flags:
+  enable_advanced_filtering: true
+  enable_rule_optimization: true
+  enable_performance_monitoring: true
+  enable_user_feedback: true
+  enable_adaptive_learning: true
+  enable_ml_models: true
+  enable_external_apis: false
+
+# Monitoring and Metrics
+monitoring:
+  metrics:
+    enabled: true
+    collection_interval: 60  # seconds
+    retention_days: 7
+    
+  health_checks:
+    enabled: true
+    check_interval: 30
+    endpoint: "/health"
+    
+  performance_profiling:
+    enabled: true
+    sample_rate: 1.0  # 100% sampling in development
+    
+# File Storage
+storage:
+  local_storage:
+    enabled: true
+    base_path: "./data"
+    create_directories: true
+    
+  cloud_storage:
+    enabled: false
+    
+# Email Notifications (for testing)
+email:
+  smtp:
+    enabled: false
+    host: "localhost"
+    port: 1025
+    username: "dev"
+    password: "dev"
+    
+  notifications:
+    security_alerts: false
+    performance_alerts: false
+    compliance_reports: false

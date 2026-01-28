@@ -1,0 +1,343 @@
+# Production Environment Configuration
+# Settings optimized for production deployment
+
+environment:
+  name: "production"
+  debug: false
+  log_level: "INFO"
+  
+# Database Configuration
+database:
+  url: "${DATABASE_URL}"  # From environment variable
+  echo: false
+  pool_size: 20
+  max_overflow: 30
+  pool_timeout: 30
+  pool_pre_ping: true
+  pool_recycle: 3600
+
+# Redis Configuration  
+redis:
+  url: "${REDIS_URL}"  # From environment variable
+  decode_responses: true
+  socket_timeout: 2
+  socket_connect_timeout: 2
+  connection_pool_kwargs:
+    max_connections: 100
+    retry_on_timeout: true
+
+# API Configuration
+api:
+  host: "0.0.0.0"
+  port: 8000
+  reload: false
+  workers: 4
+  access_log: false  # Use structured logging instead
+  
+  cors:
+    allow_origins: ["${FRONTEND_URL}"]
+    allow_credentials: true
+    allow_methods: ["GET", "POST", "PUT", "DELETE"]
+    allow_headers: ["Authorization", "Content-Type"]
+
+# Security Configuration
+security:
+  encryption_key: "${ENCRYPTION_KEY}"  # From environment variable
+  jwt_secret: "${JWT_SECRET}"  # From environment variable
+  jwt_algorithm: "HS256"
+  jwt_expire_minutes: 30
+  
+  api_key: "${API_KEY}"  # From environment variable
+  ssl_required: true
+  rate_limiting:
+    enabled: true
+    requests_per_minute: 100
+    burst_size: 200
+
+# Rule Engine Configuration
+rule_engine:
+  # Performance Settings
+  performance:
+    max_evaluation_time_ms: 100
+    max_concurrent_rules: 100
+    cache_size: 10000
+    batch_size: 32
+    
+  # Learning Settings  
+  learning:
+    enabled: true
+    learning_rate: 0.001
+    adaptation_frequency: "weekly"
+    feedback_collection: true
+    
+  # Production Features
+  production:
+    enable_test_endpoints: false
+    enable_rule_editor: false
+    enable_performance_profiler: false
+    mock_external_services: false
+
+# Validation Configuration
+validation:
+  input_validation:
+    max_content_size: 10000  # 10KB for production
+    allowed_formats: ["text", "markdown", "json"]
+    strict_validation: true
+    
+  output_validation:
+    quality_threshold: 0.9
+    auto_correction: false
+    suggestion_enabled: true
+
+# Content Processing
+content_processing:
+  # Text Analysis
+  text_analysis:
+    sentiment_analysis: true
+    language_detection: true
+    keyword_extraction: true
+    entity_recognition: true
+    
+  # ML Models
+  models:
+    cache_models: true
+    model_cache_dir: "/app/models"
+    download_missing_models: false
+    use_gpu: true  # GPU acceleration enabled
+    
+  # Content Filtering
+  filtering:
+    strict_mode: true
+    profanity_filter: true
+    pii_detection: true
+    copyright_check: true
+
+# External Service Integration
+external_services:
+  # AI Services
+  ai_services:
+    openai:
+      enabled: true
+      api_key: "${OPENAI_API_KEY}"
+      model: "gpt-4"
+      max_tokens: 1000
+      
+    anthropic:
+      enabled: true
+      api_key: "${ANTHROPIC_API_KEY}"
+      model: "claude-3-opus"
+      max_tokens: 1000
+      
+  # Monitoring Services
+  monitoring:
+    sentry:
+      enabled: true
+      dsn: "${SENTRY_DSN}"
+      environment: "production"
+      traces_sample_rate: 0.1
+      
+    prometheus:
+      enabled: true
+      port: 9090
+      
+    grafana:
+      enabled: true
+      port: 3000
+
+# Production Tools
+production_tools:
+  # Monitoring
+  monitoring:
+    application_metrics: true
+    infrastructure_metrics: true
+    business_metrics: true
+    alert_integration: true
+    
+  # Performance
+  performance:
+    caching: true
+    cdn_integration: true
+    load_balancing: true
+    auto_scaling: true
+    
+  # Reliability
+  reliability:
+    health_checks: true
+    circuit_breakers: true
+    retry_mechanisms: true
+    graceful_degradation: true
+
+# Logging Configuration
+logging:
+  version: 1
+  disable_existing_loggers: false
+  
+  formatters:
+    json:
+      format: '{"timestamp": "%(asctime)s", "level": "%(levelname)s", "logger": "%(name)s", "message": "%(message)s", "module": "%(module)s", "function": "%(funcName)s"}'
+      
+    structured:
+      class: "pythonjsonlogger.jsonlogger.JsonFormatter"
+      format: "%(asctime)s %(name)s %(levelname)s %(message)s"
+      
+  handlers:
+    console:
+      class: "logging.StreamHandler"
+      level: "INFO"
+      formatter: "structured"
+      stream: "ext://sys.stdout"
+      
+    file:
+      class: "logging.handlers.RotatingFileHandler"
+      level: "WARNING"
+      formatter: "json"
+      filename: "/app/logs/production.log"
+      maxBytes: 104857600  # 100MB
+      backupCount: 10
+      
+    error_file:
+      class: "logging.handlers.RotatingFileHandler"
+      level: "ERROR"
+      formatter: "json"
+      filename: "/app/logs/error.log"
+      maxBytes: 52428800  # 50MB
+      backupCount: 5
+      
+  loggers:
+    rules_emerging_pattern:
+      level: "INFO"
+      handlers: ["console", "file", "error_file"]
+      propagate: false
+      
+    uvicorn:
+      level: "WARNING"
+      handlers: ["console"]
+      propagate: false
+      
+    uvicorn.access:
+      level: "WARNING"
+      handlers: ["console"]
+      propagate: false
+      
+  root:
+    level: "INFO"
+    handlers: ["console", "file"]
+
+# Feature Flags
+feature_flags:
+  enable_advanced_filtering: true
+  enable_rule_optimization: true
+  enable_performance_monitoring: true
+  enable_user_feedback: true
+  enable_adaptive_learning: true
+  enable_ml_models: true
+  enable_external_apis: true
+
+# Monitoring and Metrics
+monitoring:
+  metrics:
+    enabled: true
+    collection_interval: 60  # seconds
+    retention_days: 90
+    prometheus_push: true
+    
+  health_checks:
+    enabled: true
+    check_interval: 30
+    endpoint: "/health"
+    detailed_health: "/health/detailed"
+    
+  performance_profiling:
+    enabled: true
+    sample_rate: 0.01  # 1% sampling in production
+    
+  alerting:
+    error_rate_threshold: 0.05  # 5%
+    response_time_threshold: 1000  # 1 second
+    memory_usage_threshold: 0.8  # 80%
+    cpu_usage_threshold: 0.8  # 80%
+
+# File Storage
+storage:
+  local_storage:
+    enabled: false  # Use cloud storage in production
+    
+  cloud_storage:
+    enabled: true
+    provider: "aws_s3"  # or "gcs", "azure_blob"
+    bucket: "${STORAGE_BUCKET}"
+    region: "${STORAGE_REGION}"
+    access_key: "${AWS_ACCESS_KEY_ID}"
+    secret_key: "${AWS_SECRET_ACCESS_KEY}"
+
+# Email Notifications
+email:
+  smtp:
+    enabled: true
+    host: "${SMTP_HOST}"
+    port: ${SMTP_PORT}
+    username: "${SMTP_USERNAME}"
+    password: "${SMTP_PASSWORD}"
+    use_tls: true
+    
+  notifications:
+    security_alerts: true
+    performance_alerts: true
+    compliance_reports: true
+    
+  recipients:
+    security_team: "${SECURITY_TEAM_EMAIL}"
+    operations_team: "${OPS_TEAM_EMAIL}"
+    compliance_team: "${COMPLIANCE_TEAM_EMAIL}"
+
+# Backup and Recovery
+backup:
+  database_backup:
+    enabled: true
+    frequency: "daily"
+    retention_days: 30
+    storage_location: "s3://${BACKUP_BUCKET}/database"
+    
+  file_backup:
+    enabled: true
+    frequency: "weekly"
+    retention_days: 90
+    storage_location: "s3://${BACKUP_BUCKET}/files"
+
+# Compliance and Auditing
+compliance:
+  audit_logging:
+    enabled: true
+    log_all_api_calls: true
+    log_all_rule_evaluations: true
+    log_user_actions: true
+    retention_days: 2555  # 7 years
+    
+  data_protection:
+    encryption_at_rest: true
+    encryption_in_transit: true
+    data_minimization: true
+    right_to_deletion: true
+    
+  regulatory_compliance:
+    gdpr: true
+    ccpa: true
+    hipaa: false  # Only if handling health data
+    
+# Scaling Configuration
+scaling:
+  auto_scaling:
+    enabled: true
+    min_instances: 2
+    max_instances: 20
+    target_cpu_utilization: 70
+    target_memory_utilization: 80
+    
+  load_balancing:
+    algorithm: "round_robin"
+    health_check_interval: 30
+    sticky_sessions: false
+    
+  resource_limits:
+    max_memory_per_instance: "4Gi"
+    max_cpu_per_instance: "2000m"

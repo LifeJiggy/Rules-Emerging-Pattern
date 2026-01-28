@@ -1,0 +1,248 @@
+# Rule Enforcement Levels Configuration
+# Defines the severity and behavior of different enforcement strategies
+
+enforcement_levels:
+  # Strict Enforcement - Non-negotiable, automatic blocking
+  strict:
+    description: "Non-negotiable safety rules with automatic enforcement"
+    priority: 1
+    auto_block: true
+    user_override: false
+    escalation_required: true
+    
+    # Response Configuration
+    response:
+      immediate: true
+      response_time_ms: 50
+      message: "Content blocked due to policy violation"
+      show_reasons: false  # Security reasons
+      
+    # Escalation Rules
+    escalation:
+      critical_violations: true
+      auto_report_authorities: true
+      notify_admins: true
+      legal_review: true
+      immediate_action: true
+      
+    # Logging Requirements
+    logging:
+      level: "comprehensive"
+      store_content: false
+      store_content_hash: true
+      store_user_context: true
+      retention_days: 2555  # 7 years
+      
+    # Performance Constraints
+    performance:
+      max_evaluation_time_ms: 50
+      max_false_positive_rate: 0.001
+      accuracy_requirement: 0.999
+
+  # Advisory Enforcement - Warning with user override option
+  advisory:
+    description: "High-priority rules with warnings and override capability"
+    priority: 2
+    auto_block: false
+    user_override: true
+    override_justification: true
+    
+    # Response Configuration
+    response:
+      immediate: true
+      response_time_ms: 100
+      message: "Warning: Content may violate operational policies"
+      show_reasons: true
+      show_suggestions: true
+      
+    # Override Handling
+    override:
+      require_justification: true
+      justification_types: ["business_reason", "false_positive", "context_understanding"]
+      approval_required: false
+      override_limit_per_hour: 10
+      audit_override: true
+      
+    # Logging Requirements
+    logging:
+      level: "standard"
+      store_content: true
+      store_content_hash: true
+      store_user_context: true
+      retention_days: 1095  # 3 years
+      
+    # Performance Constraints
+    performance:
+      max_evaluation_time_ms: 100
+      max_false_positive_rate: 0.05
+      accuracy_requirement: 0.95
+
+  # Adaptive Enforcement - Context-aware, learning-based
+  adaptive:
+    description: "User preference rules with adaptive learning"
+    priority: 3
+    auto_block: false
+    user_override: true
+    learning_enabled: true
+    
+    # Response Configuration
+    response:
+      immediate: false  # Can be delayed for learning
+      response_time_ms: 200
+      message: "Suggestion: Content could be improved"
+      show_reasons: true
+      show_suggestions: true
+      offer_alternatives: true
+      
+    # Learning Configuration
+    learning:
+      user_feedback_weight: 0.7
+      system_optimization_weight: 0.3
+      adaptation_rate: 0.01
+      feedback_types:
+        - "explicit_feedback"
+        - "implicit_behavior"
+        - "a_b_testing"
+      learning_window_days: 30
+      
+    # Override Handling
+    override:
+      require_justification: false
+      learn_from_overrides: true
+      pattern_recognition: true
+      adaptation_frequency: "weekly"
+      
+    # Logging Requirements
+    logging:
+      level: "minimal"  # Privacy-focused
+      store_content: false
+      store_content_hash: true
+      store_user_context: false  # Privacy protection
+      retention_days: 90
+      
+    # Performance Constraints
+    performance:
+      max_evaluation_time_ms: 200
+      max_false_positive_rate: 0.10
+      accuracy_requirement: 0.80
+
+  # Fallback Enforcement - When other enforcement fails
+  fallback:
+    description: "Default enforcement when primary methods fail"
+    priority: 4
+    auto_block: false
+    user_override: true
+    temporary_measures: true
+    
+    # Response Configuration
+    response:
+      immediate: true
+      response_time_ms: 300
+      message: "System limitations: Manual review required"
+      show_reasons: false
+      escalate_to_human: true
+      
+    # Fallback Strategies
+    strategies:
+      - "queue_for_human_review"
+      - "apply_stricter_rules_temporarily"
+      - "use_alternate_detection_method"
+      - "limit_functionality"
+      
+    # Logging Requirements
+    logging:
+      level: "comprehensive"  # Critical for debugging
+      store_content: true
+      store_content_hash: true
+      store_system_state: true
+      retention_days: 365
+      
+    # Performance Constraints
+    performance:
+      max_evaluation_time_ms: 300
+      max_false_positive_rate: 0.20
+      accuracy_requirement: 0.60
+
+# Enforcement Hierarchies
+hierarchies:
+  tier_priority:
+    safety: "strict"
+    operational: "advisory" 
+    preference: "adaptive"
+    
+  conflict_resolution:
+    default: "higher_priority_wins"
+    fallback: "context_aware"
+    exception: "human_review"
+
+# Enforcement Metrics
+metrics:
+  strict:
+    - "block_rate"
+    - "false_positive_rate"
+    - "escalation_frequency"
+    - "legal_compliance_rate"
+    
+  advisory:
+    - "warning_rate"
+    - "override_rate"
+    - "user_satisfaction_score"
+    - "compliance_rate"
+    
+  adaptive:
+    - "suggestion_acceptance_rate"
+    - "learning_effectiveness"
+    - "user_engagement_rate"
+    - "personalization_score"
+    
+  fallback:
+    - "fallback_frequency"
+    - "human_review_time"
+    - "system_recovery_time"
+    - "error_resolution_rate"
+
+# Enforcement Triggers
+triggers:
+  # Automatic triggers
+  automatic:
+    - "rule_violation_detected"
+    - "confidence_threshold_met"
+    - "pattern_match_found"
+    - "ml_model_prediction"
+    
+  # Manual triggers
+  manual:
+    - "user_report"
+    - "admin_review"
+    - "legal_request"
+    - "compliance_audit"
+    
+  # System triggers
+  system:
+    - "performance_degradation"
+    - "model_drift_detected"
+    - "resource_exhaustion"
+    - "service_unavailable"
+
+# Enforcement Policies
+policies:
+  # Safety Policies
+  safety:
+    zero_tolerance: true
+    immediate_action: true
+    no_user_override: true
+    mandatory_reporting: true
+    
+  # Operational Policies  
+  operational:
+    business_continuity: true
+    compliance_required: true
+    documentation_needed: true
+    audit_trail_required: true
+    
+  # Preference Policies
+  preference:
+    user_autonomy: true
+    privacy_protection: true
+    transparency_required: true
+    feedback_collection: true

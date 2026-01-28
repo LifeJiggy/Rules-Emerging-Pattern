@@ -1,0 +1,188 @@
+# Operational Rules Configuration (Tier 2 - High Priority with Conflict Resolution)
+# These rules govern operational compliance with conflict resolution mechanisms
+
+rules:
+  operational:
+    enforcement: advisory
+    priority: high
+    user_override: true
+    conflict_resolution: context_aware
+    
+    # Copyright and IP Protection
+    copyright_compliance:
+      enabled: true
+      patterns:
+        - type: "fair_use_compliance"
+          max_quote_length: 90
+          require_attribution: true
+          attribution_format: "APA"
+          ml_model: "plagiarism_detector_v1"
+          confidence_threshold: 0.7
+          action: warn_and_suggest
+          
+        - type: "content_originality"
+          similarity_threshold: 0.85
+          source_check_enabled: true
+          paraphrase_detection: true
+          ml_model: "similarity_analyzer_v2"
+          action: warn_and_request_attribution
+          
+        - type: "dmca_compliance"
+          takedown_response_time_hours: 24
+          counter_notice_handling: true
+          repeat_infringer_policy: true
+          action: comply_or_block
+
+    # Privacy and PII Protection
+    privacy_protection:
+      enabled: true
+      patterns:
+        - type: "pii_detection"
+          pii_types:
+            - "social_security_number"
+            - "credit_card_number"
+            - "email_address"
+            - "phone_number"
+            - "home_address"
+            - "medical_record"
+          redaction_method: "mask_partial"
+          ml_model: "pii_classifier_v3"
+          confidence_threshold: 0.8
+          action: redact_and_warn
+          
+        - type: "privacy_compliance"
+          regulations:
+            gdpr:
+              consent_required: true
+              data_minimization: true
+              right_to_deletion: true
+              data_portability: true
+            hipaa:
+              phi_protection: true
+              access_controls: true
+              audit_logging: true
+            ccpa:
+              do_not_sell: true
+              disclosure_transparency: true
+              deletion_rights: true
+          action: enforce_compliance
+
+    # Content Quality Standards
+    content_quality:
+      enabled: true
+      patterns:
+        - type: "quality_metrics"
+          min_readability_score: 30
+          max_repetition_ratio: 0.3
+          required_structure: true
+          grammar_check: true
+          spell_check: true
+          action: suggest_improvements
+          
+        - type: "source_verification"
+          require_sources: true
+          credible_sources_only: true
+          source_age_limit_days: 365
+          fact_check_enabled: true
+          action: request_sources_or_warn
+          
+        - type: "consistency_checking"
+          internal_consistency: true
+          factual_consistency: true
+          timeline_consistency: true
+          character_consistency: true  # for narratives
+          action: flag_inconsistencies
+
+# Enforcement Configuration
+enforcement:
+  advisory:
+    user_override: true
+    override_justification: required
+    conflict_resolution: true
+    audit_trail: selective
+    
+    # Warning Mechanisms
+    warnings:
+      context_specific: true
+      educational_content: true
+      improvement_suggestions: true
+      appeal_process: true
+      
+    # Override Handling
+    overrides:
+      require_justification: true
+      log_override_reasons: true
+      override_approval: "manager"  # manager, self, peer
+      override_review_frequency: "weekly"
+
+# Conflict Resolution
+conflict_resolution:
+  strategies:
+    - name: "priority_based"
+      description: "Operational rules take precedence over preference rules"
+      implementation: "tier_priority"
+      
+    - name: "context_aware"
+      description: "Resolution based on situational context and domain"
+      implementation: "context_analysis"
+      
+    - name: "user_preference"
+      description: "User-defined resolution preferences"
+      implementation: "user_settings"
+      
+  default_strategy: "context_aware"
+  fallback_strategy: "priority_based"
+
+# Performance Configuration
+performance:
+  operational_rules:
+    evaluation_timeout_ms: 200
+    parallel_processing: true
+    cache_results: true
+    cache_ttl_seconds: 600
+    
+    # Content Analysis
+    analysis:
+      text_similarity: true
+      semantic_analysis: true
+      source_matching: true
+      fact_checking: true
+      
+    # Resource Management
+    resources:
+      max_concurrent_evaluations: 50
+      memory_limit_mb: 1024
+      cpu_limit_cores: 2
+
+# Integration Settings
+integration:
+  external_services:
+    - name: "copyright_clearance"
+      endpoint: "https://api.copyright.com"
+      api_key_required: true
+      usage: "copyright_check"
+      
+    - name: "fact_check_service"
+      endpoint: "https://api.factcheck.org"
+      api_key_required: true
+      usage: "source_verification"
+      
+    - name: "pii_detection_service"
+      endpoint: "internal_ml_service"
+      api_key_required: false
+      usage: "privacy_protection"
+
+# Compliance and Legal
+compliance:
+  regulations:
+    - "DMCA"           # Digital Millennium Copyright Act
+    - "Copyright Law"  # International copyright treaties
+    - "GDPR"           # General Data Protection Regulation
+    - "CCPA"           # California Consumer Privacy Act
+    - "HIPAA"          # Health Insurance Portability and Accountability Act
+    
+  reporting:
+    annual_compliance_report: true
+    violation_tracking: true
+    resolution_metrics: true
+    audit_trail_retention_days: 1825  # 5 years
