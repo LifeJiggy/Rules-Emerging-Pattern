@@ -1,0 +1,13 @@
+content_filters:
+  profanity:
+    enabled: true
+    action: block
+  pii:
+    enabled: true
+    action: mask
+  copyright:
+    enabled: true
+    action: flag
+  sensitive:
+    enabled: true
+    action: review

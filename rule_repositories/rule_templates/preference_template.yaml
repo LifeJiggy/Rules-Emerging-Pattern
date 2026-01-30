@@ -1,0 +1,14 @@
+rule_template:
+  name: preference_rule
+  category: preference
+  description: Template for user preference rules
+  priority: low
+  conditions:
+    - type: preference_check
+      params: {}
+  actions:
+    - type: customize
+      message: Preference applied
+  metadata:
+    version: '1.0'
+    created_at: null

@@ -1,0 +1,14 @@
+rule_template:
+  name: operational_rule
+  category: operational
+  description: Template for operational rules
+  priority: medium
+  conditions:
+    - type: operational_check
+      params: {}
+  actions:
+    - type: enforce
+      message: Operational rule enforced
+  metadata:
+    version: '1.0'
+    created_at: null

@@ -1,0 +1,12 @@
+monitoring:
+  enabled: true
+  log_level: info
+  metrics:
+    - rule_usage
+    - conflict_count
+    - execution_time
+  alerting:
+    enabled: true
+    thresholds:
+      error_rate: 0.05
+      conflict_rate: 0.1

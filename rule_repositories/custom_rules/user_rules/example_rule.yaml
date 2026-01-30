@@ -1,0 +1,24 @@
+rule:
+  id: user-example-rule
+  name: User Example Rule
+  category: preference
+  description: An example user-specific rule
+  priority: low
+  version: '1.0'
+  conditions:
+    - type: user_preference
+      params:
+        preference_type: output_format
+        value: detailed
+  actions:
+    - type: customize
+      setting: output_format
+      value: detailed
+    - type: log
+      level: debug
+      message: User preference applied
+  metadata:
+    created_by: user
+    created_at: null
+    last_modified: null
+    active: true

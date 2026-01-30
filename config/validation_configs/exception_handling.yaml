@@ -1,0 +1,14 @@
+exception_handling:
+  user_notification:
+    enabled: true
+    channels:
+      - email
+      - in_app
+  escalation:
+    enabled: true
+    levels:
+      - low
+      - medium
+      - high
+      - critical
+    auto_escalate: true

@@ -1,0 +1,13 @@
+validation_patterns:
+  citation_check:
+    enabled: true
+    required: true
+  hallucination_detection:
+    enabled: true
+    threshold: 0.5
+  format_validation:
+    enabled: true
+    patterns:
+      - json
+      - xml
+      - yaml

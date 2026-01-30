@@ -1,0 +1,14 @@
+rule_template:
+  name: safety_rule
+  category: safety
+  description: Template for safety rules
+  priority: high
+  conditions:
+    - type: content_check
+      params: {}
+  actions:
+    - type: block
+      message: Safety violation detected
+  metadata:
+    version: '1.0'
+    created_at: null

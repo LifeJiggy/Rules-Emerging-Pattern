@@ -1,0 +1,24 @@
+rule:
+  id: org-example-rule
+  name: Organization Example Rule
+  category: operational
+  description: An example organization-specific rule
+  priority: medium
+  version: '1.0'
+  conditions:
+    - type: organization_check
+      params:
+        domain: example.com
+  actions:
+    - type: log
+      level: info
+      message: Organization rule triggered
+    - type: tag
+      tags:
+        - organization
+        - example
+  metadata:
+    created_by: admin
+    created_at: null
+    last_modified: null
+    active: true
