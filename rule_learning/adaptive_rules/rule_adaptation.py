@@ -5,7 +5,7 @@ from datetime import datetime
 
 from rules_emerging_pattern.models.rule import Rule, RuleTier
 
-logger = logging.getLogger(__name__)
+logger = logging.getlogger(__name__)
 
 
 class RuleAdaptationEngine:

@@ -5,7 +5,7 @@ from typing import Optional
 from rules_emerging_pattern.models.rule import Rule
 from rules_emerging_pattern.models.validation import Violation, ActionTaken
 
-logger = logging.getLogger(__name__)
+logger = logging.getlogger(__name__)
 
 
 class StrictEnforcer:

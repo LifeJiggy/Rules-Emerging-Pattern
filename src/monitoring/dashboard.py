@@ -5,7 +5,7 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from collections import defaultdict
 
-logger = logging.getLogger(__name__)
+logger = logging.getlogger(__name__)
 
 
 @dataclass

@@ -14,7 +14,7 @@ from rules_emerging_pattern.models.rule import Rule, RuleTier, RuleType, RuleCon
 from rules_emerging_pattern.models.validation import ValidationResult, Violation, ViolationType, ActionTaken, Suggestion
 from rules_emerging_pattern.models.conflict import RuleConflict, ConflictType, ConflictResolution, ResolutionStrategy
 
-logger = logging.getLogger(__name__)
+logger = logging.getlogger(__name__)
 
 
 class RuleEngine:

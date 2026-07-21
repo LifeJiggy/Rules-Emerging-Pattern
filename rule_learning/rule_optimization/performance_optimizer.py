@@ -3,7 +3,7 @@ import logging
 from typing import Dict, List, Any
 from collections import defaultdict
 
-logger = logging.getLogger(__name__)
+logger = logging.getlogger(__name__)
 
 
 class RulePerformanceOptimizer:

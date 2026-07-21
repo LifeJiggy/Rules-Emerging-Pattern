@@ -5,7 +5,7 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
 
-logger = logging.getLogger(__name__)
+logger = logging.getlogger(__name__)
 
 
 class AlertSeverity(Enum):

@@ -178,4 +178,4 @@ secrets.yaml
 secrets.yml
 
 
-DOC/
+*.DOC/

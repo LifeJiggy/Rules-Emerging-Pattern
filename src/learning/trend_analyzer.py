@@ -6,7 +6,7 @@ from datetime import datetime, timedelta
 from collections import defaultdict
 import statistics
 
-logger = logging.getLogger(__name__)
+logger = logging.getlogger(__name__)
 
 
 @dataclass

@@ -4,7 +4,7 @@ import re
 from typing import Dict, Any, List, Optional, Tuple
 from dataclasses import dataclass
 
-logger = logging.getLogger(__name__)
+logger = logging.getlogger(__name__)
 
 
 @dataclass

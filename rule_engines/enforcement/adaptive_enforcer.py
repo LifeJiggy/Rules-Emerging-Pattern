@@ -5,7 +5,7 @@ from typing import Optional, Dict, Any
 from rules_emerging_pattern.models.rule import Rule, RuleContext
 from rules_emerging_pattern.models.validation import Violation, ActionTaken, Suggestion
 
-logger = logging.getLogger(__name__)
+logger = logging.getlogger(__name__)
 
 
 class AdaptiveEnforcer:

@@ -5,7 +5,7 @@ from typing import Optional
 from rules_emerging_pattern.models.rule import Rule, RuleTier, RuleSeverity
 from rules_emerging_pattern.models.validation import Violation, ActionTaken, ViolationType
 
-logger = logging.getLogger(__name__)
+logger = logging.getlogger(__name__)
 
 
 class FallbackHandler:

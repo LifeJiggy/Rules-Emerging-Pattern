@@ -5,7 +5,7 @@ from typing import Dict, Any, List, Optional, Tuple
 from dataclasses import dataclass
 from datetime import datetime
 
-logger = logging.getLogger(__name__)
+logger = logging.getlogger(__name__)
 
 
 @dataclass

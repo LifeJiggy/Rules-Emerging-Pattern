@@ -25,7 +25,7 @@ from rules_emerging_pattern.models.rule import (
 from rules_emerging_pattern.models.validation import ValidationResult
 
 logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
+logger = logging.getlogger(__name__)
 
 
 def create_basic_safety_rule() -> Rule:

@@ -2,7 +2,7 @@
 
 import logging
 
-logger = logging.getLogger(__name__)
+logger = logging.getlogger(__name__)
 
 
 class EscalationProtocols:

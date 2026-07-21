@@ -5,7 +5,7 @@ from typing import Dict, Any
 from collections import defaultdict
 from datetime import datetime
 
-logger = logging.getLogger(__name__)
+logger = logging.getlogger(__name__)
 
 
 class PerformanceMonitor:

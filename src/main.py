@@ -16,7 +16,7 @@ from rules_emerging_pattern.models.rule import Rule, RuleTier, RuleEvaluationReq
 from rules_emerging_pattern.models.validation import ValidationResult, BatchValidationRequest, BatchValidationResult
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-logger = logging.getLogger(__name__)
+logger = logging.getlogger(__name__)
 
 rule_manager: Optional[RuleManager] = None
 rule_engine: Optional[RuleEngine] = None

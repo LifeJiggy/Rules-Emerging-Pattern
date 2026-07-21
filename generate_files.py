@@ -17,7 +17,7 @@ from datetime import datetime
 import os
 import shutil
 
-logger = logging.getLogger(__name__)
+logger = logging.getlogger(__name__)
 
 
 @dataclass
@@ -190,7 +190,7 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
 
-logger = logging.getLogger(__name__)
+logger = logging.getlogger(__name__)
 
 
 class EmergencyLevel(Enum):
@@ -361,7 +361,7 @@ from typing import Dict, List, Optional, Pattern
 from dataclasses import dataclass
 from datetime import datetime
 
-logger = logging.getLogger(__name__)
+logger = logging.getlogger(__name__)
 
 
 @dataclass
@@ -524,7 +524,7 @@ from datetime import datetime
 from collections import defaultdict
 import re
 
-logger = logging.getLogger(__name__)
+logger = logging.getlogger(__name__)
 
 
 @dataclass
@@ -726,7 +726,7 @@ from datetime import datetime, timedelta
 from collections import defaultdict
 import statistics
 
-logger = logging.getLogger(__name__)
+logger = logging.getlogger(__name__)
 
 
 @dataclass
@@ -960,7 +960,7 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from collections import defaultdict
 
-logger = logging.getLogger(__name__)
+logger = logging.getlogger(__name__)
 
 
 @dataclass
@@ -1194,7 +1194,7 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
 
-logger = logging.getLogger(__name__)
+logger = logging.getlogger(__name__)
 
 
 class AlertSeverity(Enum):

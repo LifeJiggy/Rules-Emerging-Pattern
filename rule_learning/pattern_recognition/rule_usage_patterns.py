@@ -4,7 +4,7 @@ from typing import Dict, List, Any, Optional
 from collections import defaultdict
 from datetime import datetime, timedelta
 
-logger = logging.getLogger(__name__)
+logger = logging.getlogger(__name__)
 
 
 class RuleUsagePatternAnalyzer:

@@ -11,7 +11,7 @@ import logging
 
 from rules_emerging_pattern.models.rule import Rule, RulePattern, RuleTier, RuleType, RuleSeverity, RuleStatus, EnforcementLevel
 
-logger = logging.getLogger(__name__)
+logger = logging.getlogger(__name__)
 
 
 class RulePatternParser:

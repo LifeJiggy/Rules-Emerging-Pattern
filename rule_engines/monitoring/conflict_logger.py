@@ -2,10 +2,10 @@
 
 import logging
 
-logger = logging.getLogger(__name__)
+logger = logging.getlogger(__name__)
 
 
-class ConflictLogger:
+class Conflictlogger:
     def __init__(self):
         self.logger = logger
         self.conflicts = []
