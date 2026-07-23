@@ -6,7 +6,7 @@ from datetime import datetime
 from rules_emerging_pattern.models.rule import RuleTier, RuleEvaluationRequest
 from rules_emerging_pattern.models.validation import ValidationResult, Suggestion
 
-logger = logging.getlogger(__name__)
+logger = logging.getLogger(__name__)
 
 
 class PreferenceRuleEngine:

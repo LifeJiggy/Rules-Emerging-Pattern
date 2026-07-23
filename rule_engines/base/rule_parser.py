@@ -11,7 +11,7 @@ import logging
 
 from rules_emerging_pattern.models.rule import Rule, RulePattern, RuleTier, RuleType, RuleSeverity, RuleStatus, EnforcementLevel
 
-logger = logging.getlogger(__name__)
+logger = logging.getLogger(__name__)
 
 
 class RulePatternParser:
@@ -365,3 +365,73 @@ class RuleTemplateParser:
     def list_templates(self) -> List[str]:
         """List available templates."""
         return list(self.templates.keys())
+
+    def get_template_for_tier(self, tier: str) -> Optional[Dict[str, Any]]:
+        """Get the appropriate template for a given tier."""
+        template_map = {
+            "safety": "safety_template",
+            "operational": "operational_template",
+            "preference": "preference_template",
+        }
+        template_name = template_map.get(tier.lower())
+        return self.templates.get(template_name) if template_name else None
+
+    def apply_template(self, template_name: str, overrides: Dict[str, Any]) -> Dict[str, Any]:
+        """Apply a template with overrides to produce a complete rule definition."""
+        if template_name not in self.templates:
+            raise ValueError(f"Template not found: {template_name}")
+        merged = self.templates[template_name].copy()
+        merged.update(overrides)
+        return merged
+
+    def validate_template_data(self, template_name: str, data: Dict[str, Any]) -> List[str]:
+        """Validate data against template requirements."""
+        errors = []
+        template = self.templates.get(template_name)
+        if not template:
+            errors.append(f"Template '{template_name}' not found")
+            return errors
+        required_fields = ["id", "name", "description"]
+        if template.get("tier") == "safety":
+            required_fields.append("patterns")
+        for field in required_fields:
+            if field not in data and field not in template:
+                errors.append(f"Missing required field: {field}")
+        if "priority" in data:
+            pri = data["priority"]
+            if not isinstance(pri, int) or pri < 1 or pri > 1000:
+                errors.append("Priority must be an integer between 1 and 1000")
+        return errors
+
+
+class RuleBatchParser:
+    """Parser for batch-importing multiple rule files."""
+
+    def __init__(self):
+        self.file_parser = RuleFileParser()
+        self._statistics: Dict[str, Any] = {"total_files": 0, "total_rules": 0, "errors": []}
+
+    def parse_multiple(self, file_paths: List[Union[str, Path]]) -> List[Rule]:
+        """Parse multiple rule files and return combined rule list."""
+        all_rules: List[Rule] = []
+        for fp in file_paths:
+            try:
+                rules = self.file_parser.parse_file(fp)
+                all_rules.extend(rules)
+                self._statistics["total_files"] += 1
+                self._statistics["total_rules"] += len(rules)
+            except Exception as e:
+                self._statistics["errors"].append({"file": str(fp), "error": str(e)})
+                logger.error("Failed to parse %s: %s", fp, e)
+        return all_rules
+
+    def parse_directories(self, directories: List[Union[str, Path]]) -> List[Rule]:
+        """Parse all rule files from multiple directories."""
+        all_rules: List[Rule] = []
+        for directory in directories:
+            rules = self.file_parser.parse_directory(directory)
+            all_rules.extend(rules)
+        return all_rules
+
+    def get_statistics(self) -> Dict[str, Any]:
+        return dict(self._statistics)

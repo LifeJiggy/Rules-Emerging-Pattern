@@ -6,7 +6,7 @@ from datetime import datetime
 from collections import defaultdict
 import re
 
-logger = logging.getlogger(__name__)
+logger = logging.getLogger(__name__)
 
 
 @dataclass

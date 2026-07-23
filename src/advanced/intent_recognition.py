@@ -5,7 +5,7 @@ from typing import Dict, List, Optional, Tuple
 from dataclasses import dataclass
 from collections import defaultdict
 
-logger = logging.getlogger(__name__)
+logger = logging.getLogger(__name__)
 
 
 @dataclass

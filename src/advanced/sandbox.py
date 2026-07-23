@@ -8,7 +8,7 @@ from datetime import datetime
 import os
 import shutil
 
-logger = logging.getlogger(__name__)
+logger = logging.getLogger(__name__)
 
 
 @dataclass
