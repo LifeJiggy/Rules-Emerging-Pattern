@@ -9,15 +9,14 @@
 A production-grade, modular rules engine providing strict guardrails, consistency enforcement, and safety boundaries for AI systems through a sophisticated tiered architecture with **15 modular subsystems**, **Python + TypeScript SDKs**, and full compliance support.
 
 ```mermaid
-%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#1a1a2e', 'secondaryColor': '#16213e', 'tertiaryColor': '#0f3460', 'lineColor': '#e94560' }}}%%
-graph TB
-    subgraph External["External"]
+flowchart TB
+    subgraph External
         SDK_PY["Python SDK"]
         SDK_TS["TypeScript SDK"]
         CLI["CLI"]
     end
 
-    subgraph API_Layer["API Layer"]
+    subgraph API_Layer
         REST["REST API"]
         WS["WebSocket"]
         GQL["GraphQL"]
@@ -25,7 +24,7 @@ graph TB
         MW["Middleware"]
     end
 
-    subgraph Core["Core Engine"]
+    subgraph Core
         RE["Rule Engine"]
         ED["Rule Dispatcher"]
         EP["Evaluation Pipeline"]
@@ -33,7 +32,7 @@ graph TB
         TIER["Tier Orchestrator"]
     end
 
-    subgraph Models["Data Models"]
+    subgraph Models
         RM["Rule Models"]
         VM["Validation Models"]
         CM["Conflict Models"]
@@ -41,7 +40,7 @@ graph TB
         AM["Audit Models"]
     end
 
-    subgraph Services["Services"]
+    subgraph Services
         LEARN["Learning Engine"]
         COMP["Compliance"]
         PRIV["Privacy"]
@@ -50,7 +49,7 @@ graph TB
         STORE["Storage"]
     end
 
-    subgraph Monitoring["Observability"]
+    subgraph Observability
         METRICS["Metrics Collector"]
         ALERTS["Alert Manager"]
         DASH["Dashboard"]
@@ -58,7 +57,7 @@ graph TB
         EVENTS["Event Bus"]
     end
 
-    subgraph Tools["Developer Tools"]
+    subgraph Tools
         ANALYZER["Rule Analyzer"]
         DEBUG["Debug Tool"]
         PROFILER["Profiler"]
@@ -66,7 +65,7 @@ graph TB
         VIZ["Visualizer"]
     end
 
-    subgraph Utils["Utilities"]
+    subgraph Utils
         VALIDATORS["Validators"]
         SERIALIZERS["Serializers"]
         CACHE["Cache Manager"]
@@ -79,8 +78,8 @@ graph TB
     Core --> Models
     Core --> Services
     Services --> Models
-    Core --> Monitoring
-    Services --> Monitoring
+    Core --> Observability
+    Services --> Observability
     Tools --> Core
     Tools --> Services
     Utils -.-> API_Layer
@@ -141,17 +140,17 @@ sequenceDiagram
 
 ```mermaid
 flowchart TD
-    Input["Input Content"] --> Safety{"Safety Tier<br/>Strict Enforcement"}
-    Safety -->|Pass| Operational{"Operational Tier<br/>Advisory"}
-    Safety -->|Fail| Block["🚫 Block Content<br/>Return Violation"]
-    Operational -->|Pass| Preference{"Preference Tier<br/>Adaptive"}
-    Operational -->|Warning| Flag["⚠️ Flag + Continue"]
+    Input["Input Content"] --> Safety{"Safety Tier - Strict"}
+    Safety -->|Pass| Operational{"Operational Tier - Advisory"}
+    Safety -->|Fail| Block["Block Content - Violation"]
+    Operational -->|Pass| Preference{"Preference Tier - Adaptive"}
+    Operational -->|Warning| Flag["Flag + Continue"]
     Preference -->|Match| Apply["Apply User Preferences"]
     Preference -->|No Match| Default["Use Default Behavior"]
     Flag --> Preference
-    Apply --> Output["✅ Validated Output"]
+    Apply --> Output["Validated Output"]
     Default --> Output
-    Block --> Response["Return Error Response"]
+    Block --> Response["Error Response"]
 ```
 
 ---
@@ -202,17 +201,17 @@ classDiagram
 ```mermaid
 flowchart LR
     Input["Content"] --> Orchestrator["Compliance Orchestrator"]
-    Orchestrator --> GDPR["GDPR Checker<br/>Data Protection"]
-    Orchestrator --> HIPAA["HIPAA Checker<br/>Health Data"]
-    Orchestrator --> PCI["PCI Checker<br/>Payment Data"]
-    Orchestrator --> SOX["SOX Checker<br/>Financial Data"]
+    Orchestrator --> GDPR["GDPR Checker - Data Protection"]
+    Orchestrator --> HIPAA["HIPAA Checker - Health Data"]
+    Orchestrator --> PCI["PCI Checker - Payment Data"]
+    Orchestrator --> SOX["SOX Checker - Financial Data"]
     GDPR --> Report["Compliance Report"]
     HIPAA --> Report
     PCI --> Report
     SOX --> Report
-    Report --> Action["Action Required?"]
+    Report --> Action{"Action Required?"}
     Action -->|Yes| Remediate["Remediate"]
-    Action -->|No| Pass["✅ Pass"]
+    Action -->|No| Pass["Pass - Clear"]
 ```
 
 ### Monitoring (`src/monitoring/`)
@@ -257,12 +256,12 @@ sequenceDiagram
 
 ```mermaid
 flowchart LR
-    Input["Raw Content"] --> Classifier["Data Classifier<br/>PII Detection"]
-    Classifier -->|PII Found| Redact["Data Redactor<br/>Masking"]
+    Input["Raw Content"] --> Classifier["Data Classifier - PII Detection"]
+    Classifier -->|PII Found| Redact["Data Redactor - Masking"]
     Classifier -->|No PII| Pass["Pass Through"]
-    Redact --> Consent["Consent Manager<br/>Verify Consent"]
-    Consent --> Anonymize["Anonymizer<br/>Generalize/Suppress"]
-    Anonymize --> Auditor["Privacy Auditor<br/>Audit Trail"]
+    Redact --> Consent["Consent Manager - Verify Consent"]
+    Consent --> Anonymize["Anonymizer - Generalize/Suppress"]
+    Anonymize --> Auditor["Privacy Auditor - Audit Trail"]
     Pass --> Output["Safe Output"]
     Auditor --> Output
 ```
@@ -286,14 +285,14 @@ flowchart TD
 
 ```mermaid
 flowchart LR
-    subgraph Cache["Cache Layer"]
-        CS["Cache Store<br/>Redis/Mem"]
+    subgraph Cache_Layer
+        CS["Cache Store (Redis/Mem)"]
     end
-    subgraph Persistent["Persistent Layer"]
-        FS["File Store<br/>Disk/S3"]
-        RS["Rule Storage<br/>DB"]
+    subgraph Persistent_Layer
+        FS["File Store (Disk/S3)"]
+        RS["Rule Storage (DB)"]
     end
-    subgraph Ops["Operations"]
+    subgraph Operations
         BM["Backup Manager"]
         MM["Migration Manager"]
     end
@@ -354,12 +353,12 @@ flowchart LR
 
 ```mermaid
 flowchart LR
-    Req["Request"] --> VM["Validation<br/>Middleware"]
-    VM --> AuthM["Auth<br/>Middleware"]
-    AuthM --> RL["Rate Limit<br/>Middleware"]
-    RL --> Log["Logging<br/>Middleware"]
+    Req["Request"] --> VM["Validation Middleware"]
+    VM --> AuthM["Auth Middleware"]
+    AuthM --> RL["Rate Limit Middleware"]
+    RL --> Log["Logging Middleware"]
     Log --> Handler["Route Handler"]
-    Handler --> Audit["Audit<br/>Middleware"]
+    Handler --> Audit["Audit Middleware"]
     Audit --> Resp["Response"]
 ```
 
@@ -367,11 +366,11 @@ flowchart LR
 
 ```mermaid
 flowchart TD
-    Input["Content"] --> IA["Intent Analyzer<br/>Classify Intent"]
-    IA --> AV["Age Verifier<br/>Age Check"]
-    IA --> ER["Emergency Response<br/>Safety Check"]
-    AV --> Sandbox["Code Sandbox<br/>Isolated Execution"]
-    ER --> Reporter["Violation Reporter<br/>Generate Report"]
+    Input["Content"] --> IA["Intent Analyzer - Classify Intent"]
+    IA --> AV["Age Verifier - Age Check"]
+    IA --> ER["Emergency Response - Safety Check"]
+    AV --> Sandbox["Code Sandbox - Isolated Execution"]
+    ER --> Reporter["Violation Reporter - Generate Report"]
     Sandbox --> Output
     Reporter --> Output
     Output["Safe Output"]
@@ -381,10 +380,10 @@ flowchart TD
 
 ```mermaid
 flowchart LR
-    subgraph Cache["Memory Tiers"]
-        RC["Rule Cache<br/>L1 - Hot"]
-        PM["Pattern Cache<br/>L2 - Warm"]
-        CM["Context Memory<br/>L3 - Cold"]
+    subgraph Cache
+        RC["Rule Cache - L1 Hot"]
+        PM["Pattern Cache - L2 Warm"]
+        CM["Context Memory - L3 Cold"]
     end
     subgraph State["State Management"]
         RS["Result Store"]
@@ -401,23 +400,23 @@ flowchart LR
 
 ```mermaid
 flowchart LR
-    Rules["Rules"] --> Analyzer["Rule Analyzer<br/>Structure Analysis"]
-    Analyzer --> Debug["Debug Tool<br/>Breakpoint Debug"]
-    Debug --> Profiler["Profiler<br/>Performance Profile"]
-    Profiler --> Test["Test Runner<br/>Unit/Integration"]
-    Test --> VIZ["Visualizer<br/>Graph Visualization"]
+    Rules["Rules"] --> Analyzer["Rule Analyzer - Structure"]
+    Analyzer --> Debug["Debug Tool - Breakpoints"]
+    Debug --> Profiler["Profiler - Performance"]
+    Profiler --> Test["Test Runner - Unit/Integration"]
+    Test --> VIZ["Visualizer - Graph"]
 ```
 
 ### Utilities (`src/utils/`)
 
 ```mermaid
 flowchart LR
-    subgraph Utils["Utility Services"]
-        V["Validators<br/>Input/Type/Format"]
-        S["Serializers<br/>JSON/YAML/Protobuf"]
-        CM["Cache Manager<br/>TTL/LRU Eviction"]
-        CL["Config Loader<br/>Env/File/Remote"]
-        RL["Rate Limiter<br/>Token Bucket"]
+    subgraph Utils
+        V["Validators - Input/Type/Format"]
+        S["Serializers - JSON/YAML/Protobuf"]
+        CM["Cache Manager - TTL/LRU"]
+        CL["Config Loader - Env/File/Remote"]
+        RL["Rate Limiter - Token Bucket"]
     end
     All["All Modules"] --> V
     All --> S
