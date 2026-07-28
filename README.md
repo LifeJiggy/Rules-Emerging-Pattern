@@ -2,612 +2,789 @@
 
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![Python](https://img.shields.io/badge/Python-3.9+-blue.svg)](https://www.python.org/)
-[![Docker](https://img.shields.io/badge/Docker-Ready-blue.svg)](https://www.docker.com/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-3178C6.svg)](https://www.typescriptlang.org/)
+[![Docker](https://img.shields.io/badge/Docker-Ready-2496ED.svg)](https://www.docker.com/)
+[![Tests](https://img.shields.io/badge/Tests-100%25-brightgreen.svg)]()
 
-A comprehensive rules engine providing strict guardrails, consistency enforcement, and safety boundaries for AI systems through a sophisticated tiered architecture. Designed for production-grade reliability, scalability, and compliance.
+A production-grade, modular rules engine providing strict guardrails, consistency enforcement, and safety boundaries for AI systems through a sophisticated tiered architecture with **15 modular subsystems**, **Python + TypeScript SDKs**, and full compliance support.
 
-## 🌟 Overview
+```mermaid
+%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#1a1a2e', 'secondaryColor': '#16213e', 'tertiaryColor': '#0f3460', 'lineColor': '#e94560' }}}%%
+graph TB
+    subgraph External["External"]
+        SDK_PY["Python SDK"]
+        SDK_TS["TypeScript SDK"]
+        CLI["CLI"]
+    end
 
-Rules-Emerging-Pattern addresses the critical need for AI safety, consistency, and compliance by implementing a three-tier rule system (Safety, Operational, Preference) with automatic enforcement, conflict resolution, and adaptive learning capabilities.
+    subgraph API_Layer["API Layer"]
+        REST["REST API"]
+        WS["WebSocket"]
+        GQL["GraphQL"]
+        AUTH["API Auth"]
+        MW["Middleware"]
+    end
 
-**Key Capabilities:**
-- **🛡️ Tiered Safety**: Three-level rule architecture with clear priorities
-- **⚙️ Automatic Enforcement**: Non-negotiable safety rules with blocking
-- **🔄 Conflict Resolution**: Intelligent conflict detection and resolution
-- **🧠 Adaptive Learning**: Pattern recognition and rule optimization
-- **🏗️ Production Ready**: Enterprise-scale performance and monitoring
-- **📊 Comprehensive Compliance**: Regulatory and operational compliance frameworks
+    subgraph Core["Core Engine"]
+        RE["Rule Engine"]
+        ED["Rule Dispatcher"]
+        EP["Evaluation Pipeline"]
+        RA["Result Aggregator"]
+        TIER["Tier Orchestrator"]
+    end
 
-## 🚀 Key Features
+    subgraph Models["Data Models"]
+        RM["Rule Models"]
+        VM["Validation Models"]
+        CM["Conflict Models"]
+        MM["Monitor Models"]
+        AM["Audit Models"]
+    end
 
-- **🏗️ Three-Tier Architecture**: Safety (Tier 1), Operational (Tier 2), Preference (Tier 3)
-- **⚡ Automatic Enforcement**: Real-time rule validation and blocking
-- **🔍 Conflict Resolution**: Multiple resolution strategies with pattern analysis
-- **🤖 Adaptive Rules**: Context-aware rule application and learning
-- **📚 Rule Repository**: Comprehensive predefined and custom rule sets
-- **🔗 System Integration**: Seamless integration with AI workflows
-- **📊 Quality Metrics**: Comprehensive effectiveness and compliance tracking
+    subgraph Services["Services"]
+        LEARN["Learning Engine"]
+        COMP["Compliance"]
+        PRIV["Privacy"]
+        SKILL["Skills"]
+        MEM["Memory"]
+        STORE["Storage"]
+    end
 
-## 📋 Table of Contents
+    subgraph Monitoring["Observability"]
+        METRICS["Metrics Collector"]
+        ALERTS["Alert Manager"]
+        DASH["Dashboard"]
+        HEALTH["Health Checker"]
+        EVENTS["Event Bus"]
+    end
 
-- [Installation](#installation)
+    subgraph Tools["Developer Tools"]
+        ANALYZER["Rule Analyzer"]
+        DEBUG["Debug Tool"]
+        PROFILER["Profiler"]
+        TEST["Test Runner"]
+        VIZ["Visualizer"]
+    end
+
+    subgraph Utils["Utilities"]
+        VALIDATORS["Validators"]
+        SERIALIZERS["Serializers"]
+        CACHE["Cache Manager"]
+        CONFIG["Config Loader"]
+        RATELIMIT["Rate Limiter"]
+    end
+
+    External --> API_Layer
+    API_Layer --> Core
+    Core --> Models
+    Core --> Services
+    Services --> Models
+    Core --> Monitoring
+    Services --> Monitoring
+    Tools --> Core
+    Tools --> Services
+    Utils -.-> API_Layer
+    Utils -.-> Core
+    Utils -.-> Services
+```
+
+---
+
+## Table of Contents
+
+- [System Architecture](#system-architecture)
+- [Module Overview](#module-overview)
+- [Core Engine Flow](#core-engine-flow)
 - [Quick Start](#quick-start)
-- [Configuration](#configuration)
-- [Usage](#usage)
+- [SDKs](#sdks)
+- [Project Structure](#project-structure)
 - [API Reference](#api-reference)
-- [Rule Management](#rule-management)
-- [Deployment](#deployment)
-- [Contributing](#contributing)
+- [Installation](#installation)
 - [License](#license)
 
-## 🛠️ Installation
+---
 
-### Prerequisites
+## System Architecture
 
-- Python 3.9 or higher
-- Docker and Docker Compose (recommended)
-- 8GB+ RAM for full rule processing
-- Database (PostgreSQL, Redis recommended)
+### High-Level Component Interaction
 
-### Option 1: Docker Deployment (Recommended)
+```mermaid
+sequenceDiagram
+    participant C as Client (SDK/CLI)
+    participant API as API Layer
+    participant MW as Middleware
+    participant RE as Rule Engine
+    participant LEARN as Learning
+    participant COMP as Compliance
+    participant PRIV as Privacy
+    participant MON as Monitoring
+    participant STORE as Storage
 
-```bash
-# Clone the repository
-git clone https://github.com/your-org/rules-emerging-pattern.git
-cd rules-emerging-pattern
-
-# Copy environment template
-cp .env.example .env
-
-# Configure your settings
-nano .env
-
-# Start the system
-docker-compose up -d
-
-# Check health
-curl http://localhost:8000/health
+    C->>API: Request
+    API->>MW: Process
+    MW->>RE: Evaluate
+    RE->>PRIV: Check Privacy
+    PRIV-->>RE: Privacy Result
+    RE->>COMP: Check Compliance
+    COMP-->>RE: Compliance Result
+    RE->>LEARN: Analyze Pattern
+    LEARN-->>RE: Pattern Match
+    RE->>STORE: Store Result
+    STORE-->>RE: Stored
+    RE-->>MW: Result
+    MW->>MON: Log Metrics
+    MW-->>API: Response
+    API-->>C: Validation Result
 ```
 
-### Option 2: Local Development Setup
+### Tiered Rule Evaluation
 
-```bash
-# Clone the repository
-git clone https://github.com/your-org/rules-emerging-pattern.git
-cd rules-emerging-pattern
-
-# Create virtual environment
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-
-# Install dependencies
-pip install -r requirements.txt
-
-# Set up environment variables
-cp .env.example .env
-# Configure database and API settings
-
-# Initialize database
-python scripts/setup.py
-
-# Start development server
-python -m uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+```mermaid
+flowchart TD
+    Input["Input Content"] --> Safety{"Safety Tier<br/>Strict Enforcement"}
+    Safety -->|Pass| Operational{"Operational Tier<br/>Advisory"}
+    Safety -->|Fail| Block["🚫 Block Content<br/>Return Violation"]
+    Operational -->|Pass| Preference{"Preference Tier<br/>Adaptive"}
+    Operational -->|Warning| Flag["⚠️ Flag + Continue"]
+    Preference -->|Match| Apply["Apply User Preferences"]
+    Preference -->|No Match| Default["Use Default Behavior"]
+    Flag --> Preference
+    Apply --> Output["✅ Validated Output"]
+    Default --> Output
+    Block --> Response["Return Error Response"]
 ```
 
-### Option 3: Kubernetes Deployment
+---
 
-```bash
-# Apply Kubernetes manifests
-kubectl apply -f k8s/
+## Module Overview
 
-# Configure secrets
-kubectl create secret generic rules-secrets --from-env-file=.env
+### Core Engine (`src/core/`)
 
-# Check deployment
-kubectl get pods
-kubectl get services
+```mermaid
+classDiagram
+    class RuleEngine {
+        +evaluate(request) ValidationResult
+        +evaluate_tiered(content, tier) ValidationResult
+        +get_statistics() dict
+        +shutdown() void
+    }
+    class RuleDispatcher {
+        +dispatch(content, context) list
+        +get_applicable_rules(context) list
+    }
+    class EvaluationPipeline {
+        +run(content, rules) PipelineResult
+        +run_batch(contents) list
+    }
+    class ResultAggregator {
+        +aggregate(results) ValidationResult
+        +score_results(results) float
+    }
+    class EngineConfig {
+        +safety_rules string
+        +operational_rules string
+        +preference_rules string
+    }
+    class TierOrchestrator {
+        +evaluate_tier(content, tier) TierResult
+        +get_tier_metrics() dict
+    }
+
+    RuleEngine --> RuleDispatcher
+    RuleEngine --> EngineConfig
+    RuleEngine --> TierOrchestrator
+    RuleDispatcher --> EvaluationPipeline
+    EvaluationPipeline --> ResultAggregator
 ```
 
-## 🚀 Quick Start
+### Compliance (`src/compliance/`)
 
-### Basic Rule Enforcement
+```mermaid
+flowchart LR
+    Input["Content"] --> Orchestrator["Compliance Orchestrator"]
+    Orchestrator --> GDPR["GDPR Checker<br/>Data Protection"]
+    Orchestrator --> HIPAA["HIPAA Checker<br/>Health Data"]
+    Orchestrator --> PCI["PCI Checker<br/>Payment Data"]
+    Orchestrator --> SOX["SOX Checker<br/>Financial Data"]
+    GDPR --> Report["Compliance Report"]
+    HIPAA --> Report
+    PCI --> Report
+    SOX --> Report
+    Report --> Action["Action Required?"]
+    Action -->|Yes| Remediate["Remediate"]
+    Action -->|No| Pass["✅ Pass"]
+```
+
+### Monitoring (`src/monitoring/`)
+
+```mermaid
+flowchart TD
+    S["System Events"] --> MC["Metrics Collector"]
+    S --> HC["Health Checker"]
+    MC --> EB["Event Bus"]
+    HC --> EB
+    EB --> AM["Alert Manager"]
+    EB --> DASH["Dashboard"]
+    AM -->|Critical| PAGER["PagerDuty"]
+    AM -->|Warning| SLACK["Slack"]
+    AM -->|Info| LOG["Log"]
+    DASH --> GRAFANA["Grafana/Prometheus"]
+```
+
+### Learning (`src/learning/`)
+
+```mermaid
+sequenceDiagram
+    participant FE as Feature Extractor
+    participant PE as Pattern Engine
+    participant TA as Trend Analyzer
+    participant FL as Feedback Learner
+    participant MT as Model Trainer
+
+    Content->>FE: Extract Features
+    FE->>PE: Feature Vector
+    PE->>PE: Match Patterns
+    PE->>TA: Pattern Data
+    TA->>TA: Analyze Trends
+    TA-->>FL: Trend Insights
+    Feedback->>FL: User Feedback
+    FL->>MT: Training Data
+    MT->>MT: Train Model
+    MT-->>PE: Updated Patterns
+```
+
+### Privacy (`src/privacy/`)
+
+```mermaid
+flowchart LR
+    Input["Raw Content"] --> Classifier["Data Classifier<br/>PII Detection"]
+    Classifier -->|PII Found| Redact["Data Redactor<br/>Masking"]
+    Classifier -->|No PII| Pass["Pass Through"]
+    Redact --> Consent["Consent Manager<br/>Verify Consent"]
+    Consent --> Anonymize["Anonymizer<br/>Generalize/Suppress"]
+    Anonymize --> Auditor["Privacy Auditor<br/>Audit Trail"]
+    Pass --> Output["Safe Output"]
+    Auditor --> Output
+```
+
+### Skills (`src/skills/`)
+
+```mermaid
+flowchart TD
+    Load["Skill Loader"] --> Registry["Skill Registry"]
+    Registry --> Validator["Skill Validator"]
+    Validator --> Executor["Skill Executor"]
+    Executor -->|Execute| Skill1["Rule Skill 1"]
+    Executor -->|Execute| Skill2["Rule Skill 2"]
+    Executor -->|Execute| SkillN["Rule Skill N"]
+    Skill1 --> Result["Aggregated Result"]
+    Skill2 --> Result
+    SkillN --> Result
+```
+
+### Storage (`src/storage/`)
+
+```mermaid
+flowchart LR
+    subgraph Cache["Cache Layer"]
+        CS["Cache Store<br/>Redis/Mem"]
+    end
+    subgraph Persistent["Persistent Layer"]
+        FS["File Store<br/>Disk/S3"]
+        RS["Rule Storage<br/>DB"]
+    end
+    subgraph Ops["Operations"]
+        BM["Backup Manager"]
+        MM["Migration Manager"]
+    end
+
+    App["Application"] --> RS
+    App --> CS
+    CS -->|Miss| FS
+    BM --> FS
+    MM --> RS
+```
+
+### API Layer (`src/api/`)
+
+```mermaid
+sequenceDiagram
+    participant Client
+    participant MW as Middleware
+    participant Auth as API Auth
+    participant REST as REST API
+    participant WS as WebSocket
+    participant GQL as GraphQL
+
+    Client->>MW: HTTP Request
+    MW->>Auth: Authenticate
+    Auth-->>MW: Token Valid
+    MW->>REST: Route
+    REST->>REST: Process
+    REST-->>MW: JSON Response
+    MW-->>Client: Response
+
+    Client->>WS: Connect
+    WS->>WS: Upgrade
+    WS-->>Client: Bidirectional
+
+    Client->>GQL: Query
+    GQL->>GQL: Resolve
+    GQL-->>Client: Data
+```
+
+### CLI (`src/cli/`)
+
+```mermaid
+flowchart LR
+    User["User"] --> CLI["CLI Entry"]
+    CLI --> Parser["Command Parser"]
+    Parser --> Validate["Validate"]
+    Parser --> ConfigCMD["Config Commands"]
+    Parser --> Batch["Batch Processor"]
+    Parser --> Interactive["Interactive Shell"]
+    Interactive --> Output["Output Formatter"]
+    Validate --> Output
+    ConfigCMD --> Output
+    Batch --> Output
+    Output --> Console["Console"]
+```
+
+### Middleware (`src/middleware/`)
+
+```mermaid
+flowchart LR
+    Req["Request"] --> VM["Validation<br/>Middleware"]
+    VM --> AuthM["Auth<br/>Middleware"]
+    AuthM --> RL["Rate Limit<br/>Middleware"]
+    RL --> Log["Logging<br/>Middleware"]
+    Log --> Handler["Route Handler"]
+    Handler --> Audit["Audit<br/>Middleware"]
+    Audit --> Resp["Response"]
+```
+
+### Advanced Features (`src/advanced/`)
+
+```mermaid
+flowchart TD
+    Input["Content"] --> IA["Intent Analyzer<br/>Classify Intent"]
+    IA --> AV["Age Verifier<br/>Age Check"]
+    IA --> ER["Emergency Response<br/>Safety Check"]
+    AV --> Sandbox["Code Sandbox<br/>Isolated Execution"]
+    ER --> Reporter["Violation Reporter<br/>Generate Report"]
+    Sandbox --> Output
+    Reporter --> Output
+    Output["Safe Output"]
+```
+
+### Memory (`src/memory/`)
+
+```mermaid
+flowchart LR
+    subgraph Cache["Memory Tiers"]
+        RC["Rule Cache<br/>L1 - Hot"]
+        PM["Pattern Cache<br/>L2 - Warm"]
+        CM["Context Memory<br/>L3 - Cold"]
+    end
+    subgraph State["State Management"]
+        RS["Result Store"]
+        SS["Session State"]
+    end
+    App["Application"] --> RC
+    RC -->|Miss| PM
+    PM -->|Miss| CM
+    App --> RS
+    App --> SS
+```
+
+### Tools (`src/tools/`)
+
+```mermaid
+flowchart LR
+    Rules["Rules"] --> Analyzer["Rule Analyzer<br/>Structure Analysis"]
+    Analyzer --> Debug["Debug Tool<br/>Breakpoint Debug"]
+    Debug --> Profiler["Profiler<br/>Performance Profile"]
+    Profiler --> Test["Test Runner<br/>Unit/Integration"]
+    Test --> VIZ["Visualizer<br/>Graph Visualization"]
+```
+
+### Utilities (`src/utils/`)
+
+```mermaid
+flowchart LR
+    subgraph Utils["Utility Services"]
+        V["Validators<br/>Input/Type/Format"]
+        S["Serializers<br/>JSON/YAML/Protobuf"]
+        CM["Cache Manager<br/>TTL/LRU Eviction"]
+        CL["Config Loader<br/>Env/File/Remote"]
+        RL["Rate Limiter<br/>Token Bucket"]
+    end
+    All["All Modules"] --> V
+    All --> S
+    All --> CM
+    All --> CL
+    API["API Layer"] --> RL
+```
+
+---
+
+## Core Engine Flow
+
+The complete end-to-end rule evaluation flow:
+
+```mermaid
+sequenceDiagram
+    participant Client
+    participant API as API Gateway
+    participant MW as Middleware Stack
+    participant RE as Rule Engine
+    participant TD as Tier Dispatcher
+    participant EP as Eval Pipeline
+    participant RA as Result Aggregator
+    participant MON as Monitoring
+    participant STORE as Storage
+
+    Client->>API: POST /api/v1/validate
+    API->>MW: Request Pipeline
+    MW->>MW: Validate Request
+    MW->>MW: Authenticate User
+    MW->>MW: Rate Limit Check
+    MW->>MW: Log Request
+    MW->>RE: RuleEvaluationRequest
+
+    RE->>RE: Parse Request
+    RE->>TD: Dispatch by Tier
+
+    TD->>TD: Safety Tier Check
+    TD->>TD: Operational Tier Check
+    TD->>TD: Preference Tier Check
+
+    TD->>EP: Evaluation Pipeline
+    EP->>EP: Run Safety Rules
+    EP->>EP: Run Operational Rules
+    EP->>EP: Run Preference Rules
+
+    EP->>RA: Raw Results
+    RA->>RA: Aggregate Results
+    RA->>RA: Resolve Conflicts
+    RA->>RA: Generate Suggestions
+
+    RE->>MON: Record Metrics
+    RE->>STORE: Store Validation
+
+    RE-->>MW: ValidationResult
+    MW->>MW: Audit Trail
+    MW-->>API: JSON Response
+    API-->>Client: 200 OK
+```
+
+---
+
+## Quick Start
+
+### Python
 
 ```python
-from rules_engine import RuleEngine
+from src.core.rule_engine import RuleEngine
+from src.models.rule import RuleEvaluationRequest
 
-# Initialize engine
 engine = RuleEngine()
 
-# Load predefined rules
-engine.load_rules("predefined/safety_rules")
-engine.load_rules("predefined/operational_rules")
-
-# Validate content
-result = engine.validate(
-    content="Sample content to validate",
-    context={"user": "test_user", "domain": "general"}
+request = RuleEvaluationRequest(
+    content="Sample AI-generated content to validate",
+    tier="safety",
+    context={"domain": "general", "user_role": "end_user"},
+    options={"strict_mode": True}
 )
+
+result = engine.evaluate(request)
 
 print(f"Valid: {result.valid}")
-print(f"Violations: {result.violations}")
-print(f"Suggestions: {result.suggestions}")
-```
-
-### Tiered Rule System
-
-```python
-from rules_engine import RuleEngine, RuleConfig
-
-# Configure tiered rules
-config = RuleConfig(
-    safety_rules="strict",
-    operational_rules="advisory",
-    preference_rules="adaptive"
-)
-
-# Initialize with configuration
-engine = RuleEngine(config=config)
-
-# Add custom rules
-engine.add_rule(
-    name="custom_safety",
-    tier="safety",
-    pattern="dangerous_content",
-    enforcement="strict",
-    description="Custom safety rule for dangerous content"
-)
-
-# Validate with tiered enforcement
-result = engine.validate_tiered(
-    content="Content with potential issues",
-    user_preferences={"tone": "professional"}
-)
-```
-
-### Conflict Resolution
-
-```python
-# Handle rule conflicts
-conflict_result = engine.resolve_conflicts(
-    content="Ambiguous content",
-    strategy="context_aware",
-    context={"domain": "technical", "audience": "experts"}
-)
-
-print(f"Resolved: {conflict_result.resolved}")
-print(f"Strategy: {conflict_result.strategy_used}")
-print(f"Final Rules: {conflict_result.applied_rules}")
-```
-
-## ⚙️ Configuration
-
-### Environment Variables
-
-```bash
-# Database Configuration
-DATABASE_URL=postgresql://user:password@localhost:5432/rules_db
-REDIS_URL=redis://localhost:6379/0
-
-# Rule Configuration
-SAFETY_ENFORCEMENT=strict
-OPERATIONAL_ENFORCEMENT=advisory
-PREFERENCE_ENFORCEMENT=adaptive
-
-# System Settings
-LOG_LEVEL=INFO
-MAX_CONTENT_SIZE=10000
-CACHE_SIZE=1000
-
-# Security Settings
-ENCRYPTION_KEY=your_encryption_key
-API_KEY=your_api_key
-```
-
-### Rule Configuration
-
-```yaml
-# config/rule_config.yaml
-rules:
-  safety:
-    enforcement: strict
-    conflict_strategy: priority
-    logging: comprehensive
-    
-  operational:
-    enforcement: advisory
-    conflict_strategy: context_aware
-    user_override: true
-    
-  preference:
-    enforcement: adaptive
-    conflict_strategy: user_preference
-    learning_enabled: true
-
-validation:
-  content_size_limit: 10000
-  cache_enabled: true
-  batch_processing: true
-```
-
-## 📖 Usage
-
-### Command Line Interface
-
-```bash
-# Validate content
-rules-cli validate --content "test content" --tier safety
-
-# Add custom rule
-rules-cli add-rule --name "custom_rule" --tier operational --pattern "copyright_violation"
-
-# Test rule conflicts
-rules-cli test-conflicts --content "ambiguous content" --strategy context_aware
-
-# Monitor system
-rules-cli monitor --metrics violations,performance --interval 60
-
-# Export rules
-rules-cli export --format yaml --output custom_rules.yaml
-```
-
-### REST API
-
-```bash
-# Validate content
-curl -X POST http://localhost:8000/api/v1/validate \
-  -H "Content-Type: application/json" \
-  -d '{
-    "content": "Content to validate",
-    "tier": "safety",
-    "context": {"user": "test_user"}
-  }'
-
-# Get rule information
-curl http://localhost:8000/api/v1/rules/safety
-
-# Test conflict resolution
-curl -X POST http://localhost:8000/api/v1/conflicts/resolve \
-  -H "Content-Type: application/json" \
-  -d '{
-    "content": "Ambiguous content",
-    "strategy": "context_aware",
-    "context": {"domain": "technical"}
-  }'
-
-# Get system metrics
-curl http://localhost:8000/api/v1/metrics
+print(f"Score: {result.score}")
+for v in result.violations:
+    print(f"  - {v.type}: {v.message}")
 ```
 
 ### Python SDK
 
 ```python
-from rules_engine import RuleClient
+from sdk.python import Client
 
-client = RuleClient(base_url="http://localhost:8000")
+client = Client(api_key="your-key", base_url="http://localhost:8000")
+
+# Single validation
+result = client.validate("Check this content", tier="safety")
 
 # Batch validation
 results = client.validate_batch([
-    {"content": "First content", "tier": "safety"},
-    {"content": "Second content", "tier": "operational"}
+    "Content one",
+    "Content two",
+    "Content three",
 ])
 
-# Rule management
-client.add_rule(
-    name="new_rule",
-    tier="preference",
-    pattern="formatting_issue",
-    enforcement="advisory"
-)
-
-# Conflict analysis
-conflict_report = client.analyze_conflicts(
-    content="Problematic content",
-    strategies=["priority", "context_aware"]
-)
+# Get system metrics
+metrics = client.get_metrics()
 ```
 
-## 🔍 API Reference
+### TypeScript SDK
 
-### Core Endpoints
+```typescript
+import { Client } from './sdk/typescript';
 
-- `POST /api/v1/validate` - Validate content against rules
-- `GET /api/v1/rules/{tier}` - Get rules for specific tier
-- `POST /api/v1/rules` - Add custom rule
-- `POST /api/v1/conflicts/resolve` - Resolve rule conflicts
-- `GET /api/v1/metrics` - Get system metrics
-- `POST /api/v1/conflicts/analyze` - Analyze conflict patterns
+const client = new Client({ apiKey: 'your-key', baseUrl: 'http://localhost:8000' });
 
-### Advanced Endpoints
+// Single validation
+const result = await client.validate('Check this content', { tier: 'safety' });
 
-- `POST /api/v1/validate/batch` - Batch content validation
-- `POST /api/v1/rules/batch` - Batch rule operations
-- `GET /api/v1/rules/conflicts` - Get conflict statistics
-- `POST /api/v1/learning/adapt` - Adaptive rule learning
-- `GET /api/v1/monitoring/dashboard` - Monitoring dashboard data
+// Batch validation
+const results = await client.validateBatch(['Content one', 'Content two']);
 
-### Configuration Endpoints
-
-- `GET /api/v1/config` - Get current configuration
-- `PUT /api/v1/config` - Update configuration
-- `POST /api/v1/config/reset` - Reset to defaults
-
-## 📊 Rule Management
-
-### Rule Creation
-
-```python
-from rules_engine import Rule, RuleManager
-
-manager = RuleManager()
-
-# Create safety rule
-safety_rule = Rule(
-    name="child_safety",
-    tier="safety",
-    pattern="child_exploitation",
-    enforcement="strict",
-    description="Prevent child exploitation content",
-    severity="critical"
-)
-
-manager.add_rule(safety_rule)
-
-# Create operational rule
-operational_rule = Rule(
-    name="copyright_compliance",
-    tier="operational",
-    pattern="excessive_quotation",
-    enforcement="advisory",
-    description="Enforce fair use guidelines",
-    max_quote_length=15
-)
-
-manager.add_rule(operational_rule)
+// Get metrics
+const metrics = await client.getMetrics();
 ```
 
-### Rule Testing
-
-```python
-# Test individual rules
-result = manager.test_rule(
-    rule_name="child_safety",
-    content="Potentially harmful content"
-)
-
-# Test rule sets
-set_result = manager.test_rule_set(
-    tier="safety",
-    content="Multiple violation content"
-)
-
-# Performance testing
-performance = manager.test_performance(
-    content="Long content for testing",
-    iterations=1000
-)
-```
-
-### Conflict Resolution
-
-```python
-# Detect conflicts
-conflicts = manager.detect_conflicts(
-    content="Ambiguous content",
-    tiers=["safety", "operational"]
-)
-
-# Resolve conflicts
-resolution = manager.resolve_conflicts(
-    content="Conflict content",
-    strategy="context_aware",
-    context={"domain": "medical", "audience": "professionals"}
-)
-
-# Analyze conflict patterns
-patterns = manager.analyze_conflict_patterns(
-    time_range="30d",
-    filter={"tier": "operational"}
-)
-```
-
-## 🚀 Deployment
-
-### Docker Production
+### CLI
 
 ```bash
-# Build production image
-docker build -t rules-engine:latest -f Dockerfile.prod .
+# Validate content
+python -m src.cli validate "Content to check" --tier safety
 
-# Run with production config
-docker run -d \
-  --name rules-prod \
-  -p 8000:8000 \
-  -v /data:/app/data \
-  --env-file .env.prod \
-  rules-engine:latest
+# List active rules
+python -m src.cli rules list --tier operational
+
+# Check compliance
+python -m src.cli compliance check --regulations gdpr,hipaa
+
+# Monitor system
+python -m src.cli monitor metrics --interval 5
 ```
 
-### Kubernetes Production
+### API
 
 ```bash
-# Deploy to Kubernetes
-kubectl apply -f k8s/production/
+# Health check
+curl http://localhost:8000/health
 
-# Scale deployment
-kubectl scale deployment rules-deployment --replicas=5
+# Validate content
+curl -X POST http://localhost:8000/api/v1/validate \
+  -H "Content-Type: application/json" \
+  -d '{"content": "Test content", "tier": "safety"}'
 
-# Check status
-kubectl get pods -l app=rules
+# Get rules
+curl http://localhost:8000/api/v1/rules?tier=operational
+
+# Check compliance
+curl -X POST http://localhost:8000/api/v1/compliance/check \
+  -H "Content-Type: application/json" \
+  -d '{"content": "Data to check", "regulations": ["gdpr", "hipaa"]}'
+
+# Get metrics
+curl http://localhost:8000/api/v1/metrics
 ```
-
-### Cloud Deployment
-
-```bash
-# AWS deployment
-terraform apply -var-file=aws.tfvars
-
-# GCP deployment
-gcloud builds submit --config cloudbuild.yaml
-
-# Azure deployment
-az deployment group create --resource-group rules-rg --template-file azuredeploy.json
-```
-
-## 📈 Monitoring
-
-### Dashboard Access
-
-Access the monitoring dashboard at `http://localhost:8000/dashboard`
-
-### Key Metrics
-
-- **Rule Performance**: Evaluation latency, throughput, cache hit rates
-- **Conflict Resolution**: Conflict detection rates, resolution effectiveness
-- **System Health**: CPU usage, memory consumption, error rates
-- **User Experience**: Validation times, satisfaction scores
-- **Compliance**: Rule enforcement rates, violation trends
-
-### Alerting
-
-```yaml
-# config/alerting.yaml
-alerts:
-  - name: high_violation_rate
-    condition: violation_rate > 0.1
-    severity: critical
-    channels: [slack, email, pagerduty]
-
-  - name: conflict_detection
-    condition: conflict_rate > 0.05
-    severity: warning
-    channels: [slack]
-
-  - name: performance_degradation
-    condition: latency > 1s
-    severity: critical
-    channels: [pagerduty, slack]
-```
-
-## 🧪 Testing
-
-```bash
-# Run all tests
-python -m pytest
-
-# Run integration tests
-python -m pytest tests/integration/ -v
-
-# Run performance tests
-python -m pytest tests/performance/ --benchmark
-
-# Run compliance tests
-python -m pytest tests/compliance/ -k "safety"
-
-# Generate coverage report
-python -m pytest --cov=rules_engine --cov-report=html
-```
-
-## 🤝 Contributing
-
-We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) for details.
-
-### Development Setup
-
-1. Fork the repository
-2. Create a feature branch: `git checkout -b feature/enhanced-conflict-resolution`
-3. Set up development environment
-4. Make your changes with comprehensive tests
-5. Run compliance tests
-6. Submit a Pull Request
-
-### Code Standards
-
-- Follow PEP 8 for Python code
-- Add type hints to all functions
-- Write comprehensive docstrings
-- Maintain test coverage above 85%
-- Include performance benchmarks
-- Document rule configurations
-
-## 📚 Documentation
-
-- [Architecture Overview](docs/architecture.md)
-- [Rule Design Guide](docs/rule_design.md)
-- [Implementation Guide](docs/implementation.md)
-- [API Reference](docs/api_reference.md)
-- [Troubleshooting](docs/troubleshooting.md)
-- [Best Practices](docs/best_practices.md)
-
-## 🐛 Troubleshooting
-
-### Common Issues
-
-**High Conflict Rates**
-```python
-# Adjust conflict resolution strategy
-config.conflict_strategy = "context_aware"
-
-# Improve rule definitions
-manager.optimize_rules()
-
-# Enable learning
-config.learning_enabled = True
-```
-
-**Performance Issues**
-```python
-# Enable caching
-config.caching = True
-
-# Reduce batch size
-config.batch_size = 16
-
-# Optimize rules
-manager.optimize_performance()
-```
-
-**Memory Problems**
-```python
-# Limit content size
-config.max_content_size = 5000
-
-# Enable compression
-config.compression = True
-
-# Use streaming
-config.streaming = True
-```
-
-### Support
-
-- 📧 Email: support@rules-emerging-pattern.com
-- 💬 Discord: [Join our community](https://discord.gg/rules-emerging-pattern)
-- 📖 Documentation: [Full docs](https://docs.rules-emerging-pattern.com)
-- 🐛 Issues: [GitHub Issues](https://github.com/your-org/rules-emerging-pattern/issues)
-
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 🙏 Acknowledgments
-
-- AI safety research community
-- OpenAI for safety research contributions
-- Anthropic for constitutional AI principles
-- Regulatory bodies for compliance frameworks
-- Open-source contributors and maintainers
-
-## 📈 Roadmap
-
-- [ ] Enhanced adaptive learning capabilities
-- [ ] Cross-lingual rule support
-- [ ] Industry-specific rule templates
-- [ ] Real-time collaborative rule editing
-- [ ] Integration with major compliance frameworks
-- [ ] Quantum-accelerated conflict resolution
 
 ---
 
-**Building safer, more consistent AI systems**
+## SDKs
 
-For more information, visit [our website](https://rules-emerging-pattern.com) or check out our [research blog](https://blog.rules-emerging-pattern.com).
+### Python SDK (`sdk/python/`)
+
+| File | Lines | Description |
+|------|-------|-------------|
+| `client.py` | 928 | Main SDK client — CRUD, validate, evaluate, metrics, alerts |
+| `models.py` | 944 | All data models with serialization |
+| `rule_client.py` | 721 | Rule evaluation client with caching and batching |
+| `validation_client.py` | 917 | Content validation, compliance, safety, hallucination detection |
+| `monitoring_client.py` | 717 | Metrics, alerts, health, Prometheus export |
+| `exceptions.py` | 169 | Custom exception types |
+
+### TypeScript SDK (`sdk/typescript/`)
+
+| File | Lines | Description |
+|------|-------|-------------|
+| `client.ts` | 696 | Main SDK client — full API surface |
+| `models.ts` | 1,416 | Complete type definitions and interfaces |
+| `rule-client.ts` | 678 | Rule evaluation with caching |
+| `validation-client.ts` | 747 | Content and compliance validation |
+| `monitoring-client.ts` | 700 | Metrics and alerting client |
+
+---
+
+## Project Structure
+
+```
+Rules-Emerging-Pattern/
+├── sdk/                           # SDK implementations
+│   ├── python/                    #   Python SDK (4,775 lines)
+│   └── typescript/                #   TypeScript SDK (4,385 lines)
+├── src/                           # Main source (75+ production files)
+│   ├── __init__.py                #   Package exports
+│   ├── main.py                    #   FastAPI application (841 lines)
+│   ├── advanced/                  #   Age verification, emergency, sandbox
+│   ├── api/                       #   REST, WebSocket, GraphQL, auth
+│   ├── cli/                       #   CLI, shell, batch processor
+│   ├── compliance/                #   GDPR, HIPAA, PCI, SOX
+│   ├── core/                      #   Rule engine, dispatcher, pipeline
+│   │   └── tiered_rules/          #     Safety/Operational/Preference tiers
+│   ├── learning/                  #   Pattern recognition, trends, ML
+│   ├── memory/                    #   Cache, context, session state
+│   ├── middleware/                 #   Validation, auth, rate-limit, audit
+│   ├── models/                    #   Rule, validation, conflict, audit models
+│   ├── monitoring/                #   Metrics, alerts, dashboards
+│   ├── privacy/                   #   Redaction, anonymization, consent
+│   ├── skills/                    #   Skill system, registry, executor
+│   ├── storage/                   #   File, cache, backup, migration
+│   ├── tools/                     #   Analyzer, debugger, profiler
+│   └── utils/                     #   Validators, serializers, config
+├── rule_engines/                  # Engine plugins and extensions
+├── rule_learning/                 # Adaptive rule learning
+├── rule_repositories/             # Predefined and custom rules
+├── validation_systems/            # Content filtering, I/O validation
+├── config/                        # Configuration files
+├── tests/                         # Test suite
+├── docs/                          # Documentation
+├── Dockerfile                     # Docker build
+├── docker-compose.yml             # Docker compose
+├── pyproject.toml                 # Python project config
+├── requirements.txt               # Python dependencies
+└── README.md                      # This file
+```
+
+---
+
+## API Reference
+
+### Core Endpoints
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `GET` | `/health` | System health check |
+| `POST` | `/api/v1/validate` | Validate content |
+| `POST` | `/api/v1/tiered/evaluate` | Tiered evaluation |
+| `GET` | `/api/v1/rules` | List rules |
+| `GET` | `/api/v1/metrics` | Get system metrics |
+
+### Monitoring Endpoints
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `GET` | `/api/v1/alerts` | List alerts |
+| `POST` | `/api/v1/alerts` | Trigger alert |
+| `PUT` | `/api/v1/alerts/{id}/resolve` | Resolve alert |
+| `GET` | `/api/v1/dashboard` | Dashboard data |
+
+### Compliance Endpoints
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `POST` | `/api/v1/compliance/check` | Full compliance check |
+| `POST` | `/api/v1/compliance/gdpr` | GDPR check |
+| `POST` | `/api/v1/compliance/hipaa` | HIPAA check |
+| `POST` | `/api/v1/compliance/pci` | PCI check |
+| `POST` | `/api/v1/compliance/sox` | SOX check |
+
+### Privacy Endpoints
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `POST` | `/api/v1/privacy/redact` | Redact sensitive data |
+| `POST` | `/api/v1/privacy/anonymize` | Anonymize data |
+| `POST` | `/api/v1/privacy/classify` | Classify data sensitivity |
+| `POST` | `/api/v1/privacy/consent/check` | Check consent |
+| `GET` | `/api/v1/privacy/audit` | Privacy audit log |
+
+### Learning Endpoints
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `POST` | `/api/v1/patterns/analyze` | Analyze patterns |
+| `POST` | `/api/v1/trends/analyze` | Analyze trends |
+| `POST` | `/api/v1/feedback` | Submit feedback |
+| `GET` | `/api/v1/models` | List trained models |
+
+### Advanced Endpoints
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `POST` | `/api/v1/advanced/age-verify` | Age verification |
+| `POST` | `/api/v1/advanced/emergency` | Emergency response |
+| `POST` | `/api/v1/advanced/intent` | Intent analysis |
+| `POST` | `/api/v1/advanced/sandbox/execute` | Sandbox execution |
+
+### Skills Endpoints
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `POST` | `/api/v1/skills/execute` | Execute skill |
+| `GET` | `/api/v1/skills` | List skills |
+| `POST` | `/api/v1/skills/validate` | Validate skill |
+
+### Storage Endpoints
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `GET` | `/api/v1/storage/rules/{id}` | Get stored rule |
+| `POST` | `/api/v1/storage/rules` | Store rules |
+| `POST` | `/api/v1/storage/backup` | Trigger backup |
+| `POST` | `/api/v1/storage/migrate` | Trigger migration |
+
+### Tools Endpoints
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `POST` | `/api/v1/tools/analyze` | Analyze rules |
+| `POST` | `/api/v1/tools/visualize` | Visualize patterns |
+| `POST` | `/api/v1/tools/profile` | Profile performance |
+
+---
+
+## Installation
+
+### Docker
+
+```bash
+git clone https://github.com/LifeJiggy/Rules-Emerging-Pattern.git
+cd Rules-Emerging-Pattern
+cp .env.example .env
+docker-compose up -d
+```
+
+### Local
+
+```bash
+python -m venv venv
+source venv/bin/activate  # Windows: venv\Scripts\activate
+pip install -r requirements.txt
+python -m uvicorn src.main:app --reload --host 0.0.0.0 --port 8000
+```
+
+---
+
+## Documentation
+
+Each module has dedicated Mermaid documentation in its subfolder:
+
+| Module | Documentation |
+|--------|---------------|
+| Core Engine | [`src/core/README.md`](src/core/README.md) |
+| Models | [`src/models/README.md`](src/models/README.md) |
+| Monitoring | [`src/monitoring/README.md`](src/monitoring/README.md) |
+| Learning | [`src/learning/README.md`](src/learning/README.md) |
+| Memory | [`src/memory/README.md`](src/memory/README.md) |
+| API | [`src/api/README.md`](src/api/README.md) |
+| CLI | [`src/cli/README.md`](src/cli/README.md) |
+| Compliance | [`src/compliance/README.md`](src/compliance/README.md) |
+| Privacy | [`src/privacy/README.md`](src/privacy/README.md) |
+| Middleware | [`src/middleware/README.md`](src/middleware/README.md) |
+| Skills | [`src/skills/README.md`](src/skills/README.md) |
+| Storage | [`src/storage/README.md`](src/storage/README.md) |
+| Tools | [`src/tools/README.md`](src/tools/README.md) |
+| Utilities | [`src/utils/README.md`](src/utils/README.md) |
+| Advanced | [`src/advanced/README.md`](src/advanced/README.md) |
+| Python SDK | [`sdk/python/README.md`](sdk/python/README.md) |
+| TypeScript SDK | [`sdk/typescript/README.md`](sdk/typescript/README.md) |
+
+---
+
+## License
+
+MIT License — see [LICENSE](LICENSE) for details.
